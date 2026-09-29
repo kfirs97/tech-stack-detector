@@ -1,0 +1,16 @@
+{
+  "name": "tech-stack-detector",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Detect the technologies behind any website (CMS, frameworks, analytics, CDN, e-commerce...)",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test test/*.test.js"
+  },
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "apify": "^3.7.2",
+    "cheerio": "^1.2.0"
+  }
+}
