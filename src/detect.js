@@ -138,6 +138,9 @@ export function detect(signals, db) {
     });
   };
   const inlineJs = signals.scripts.join('\n').slice(0, 2_000_000);
+  // Global names declared by inline scripts, collected once (checking per technology with regexes is far too slow).
+  const declared = new Set();
+  for (const m of inlineJs.matchAll(/(?:window\.|\bvar\s+|\blet\s+|\bconst\s+)([A-Za-z_$][\w$]{4,})/g)) declared.add(m[1]);
 
   for (const tech of db.compiled) {
     const hit = (p, m) => add(tech, p, m);
@@ -167,13 +170,7 @@ export function detect(signals, db) {
       }
     }
     // Global JS variables can't be evaluated without a browser; a declaration in inline code is a weaker signal.
-    for (const global of tech.js) {
-      const root = global.split('.')[0];
-      if (root.length >= 5 && new RegExp(`(?:window\\.|\\bvar\\s+|\\blet\\s+|\\bconst\\s+)${root.replace(/[$]/g, '\\$')}\\b`).test(inlineJs)) {
-        hit({ confidence: 50, version: '' }, null);
-        break;
-      }
-    }
+    if (tech.js.some(global => declared.has(global.split('.')[0]))) hit({ confidence: 50, version: '' }, null);
   }
 
   resolveRelations(found, db);

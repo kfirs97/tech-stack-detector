@@ -50,3 +50,12 @@ test('url normalization rejects private hosts', () => {
   assert.equal(normalizeUrl('http://192.168.1.1'), null);
   assert.equal(normalizeUrl(''), null);
 });
+
+import { withDeadline } from '../src/fetch.js';
+
+test('hard deadline rejects a promise that never settles', async () => {
+  const started = Date.now();
+  await assert.rejects(withDeadline(new Promise(() => {}), 100), { name: 'TimeoutError' });
+  assert.ok(Date.now() - started < 1000);
+  assert.equal(await withDeadline(Promise.resolve(7), 100), 7);
+});

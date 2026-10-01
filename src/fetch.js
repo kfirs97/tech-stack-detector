@@ -14,11 +14,33 @@ export function normalizeUrl(input) {
   }
 }
 
+/** Rejects if `promise` doesn't settle within `ms` (a hard stop even if the network layer ignores aborts). */
+export function withDeadline(promise, ms, label = 'deadline') {
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      timer = setTimeout(() => reject(Object.assign(new Error(label), { name: 'TimeoutError' })), ms);
+    }),
+  ]).finally(() => clearTimeout(timer));
+}
+
 export async function fetchPage(url, { timeoutMs = 20000 } = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await withDeadline(fetchInner(url, controller.signal), timeoutMs + 2000, 'TimeoutError');
+  } finally {
+    clearTimeout(timer);
+    controller.abort(); // release the connection if it's still open
+  }
+}
+
+async function fetchInner(url, signal) {
   const started = Date.now();
   const res = await fetch(url, {
     redirect: 'follow',
-    signal: AbortSignal.timeout(timeoutMs),
+    signal,
     headers: { 'user-agent': UA, accept: 'text/html,application/xhtml+xml,*/*;q=0.8', 'accept-language': 'en-US,en;q=0.9' },
   });
   const headers = Object.fromEntries(res.headers.entries());

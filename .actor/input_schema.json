@@ -8,12 +8,16 @@
       "type": "array",
       "description": "Domains or URLs to analyze, e.g. \"shopify.com\" or \"https://example.com/pricing\". Duplicates are removed.",
       "editor": "stringList",
-      "prefill": ["wordpress.org", "vercel.com", "www.shopify.com"]
+      "prefill": [
+        "wordpress.org",
+        "vercel.com",
+        "www.shopify.com"
+      ]
     },
     "minConfidence": {
       "title": "Minimum confidence",
       "type": "integer",
-      "description": "Only report technologies detected with at least this confidence (0–100).",
+      "description": "Only report technologies detected with at least this confidence (0\u2013100).",
       "default": 50,
       "minimum": 0,
       "maximum": 100
@@ -37,8 +41,11 @@
       "type": "integer",
       "default": 20,
       "minimum": 5,
-      "maximum": 60
+      "maximum": 60,
+      "description": "Give up on a website after this many seconds (slow or unresponsive sites are not charged)."
     }
   },
-  "required": ["urls"]
+  "required": [
+    "urls"
+  ]
 }
