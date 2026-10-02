@@ -21,6 +21,8 @@
 - 📦 **Bulk-ready:** paste thousands of domains (with or without `https://`); duplicates are removed automatically.
 - 🔓 **Open fingerprints:** based on the community-maintained [webappanalyzer](https://github.com/enthec/webappanalyzer) database — the open continuation of Wappalyzer's fingerprints, updated regularly.
 
+> 💡 **Need contacts too?** [Website Company Enricher](https://apify.com/kfirs/website-company-enricher) returns the same tech stack **plus** emails, phones, LinkedIn & social profiles, logo and address — one row per company, same $0.01 per website.
+
 ## What it detects
 
 7,600+ technologies in 100+ categories, including:
