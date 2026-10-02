@@ -2,7 +2,7 @@
   "actorSpecification": 1,
   "name": "tech-stack-detector",
   "title": "Tech Stack Detector \u2014 Wappalyzer Alternative",
-  "description": "Find out what any website is built with: CMS, frameworks, analytics, CDN, e-commerce platform, hosting and 7,600+ other technologies. Fast, cheap, bulk-ready.",
+  "description": "Find out what any website is built with: CMS, e-commerce platform, frameworks, analytics, CDN, hosting and 7,600+ other technologies. Wappalyzer & BuiltWith alternative for lead generation \u2014 $0.01 per site, failed sites free.",
   "version": "0.1",
   "buildTag": "latest",
   "input": "./input_schema.json",
