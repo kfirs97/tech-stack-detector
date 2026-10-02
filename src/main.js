@@ -41,7 +41,10 @@ await Actor.main(async () => {
       }
       await Actor.pushData(record);
       // Charge only for websites that were actually analyzed.
-      if (!record.error) await Actor.charge({ eventName: 'website-analyzed' });
+      if (!record.error) {
+        const charged = await Actor.charge({ eventName: 'website-analyzed' });
+        if (done === 0) log.info(`Charging check: ${JSON.stringify({ chargedCount: charged.chargedCount, limitReached: charged.eventChargeLimitReached })}`);
+      }
       done++;
       if (done % 25 === 0) log.info(`Progress: ${done}/${urls.length}`);
     }
