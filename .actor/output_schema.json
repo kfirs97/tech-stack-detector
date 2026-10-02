@@ -1,0 +1,19 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Tech Stack Detector output",
+  "description": "One record per website with every detected technology, its version, confidence and categories.",
+  "properties": {
+    "overview": {
+      "type": "string",
+      "title": "Overview",
+      "description": "Table of analyzed websites with technology counts grouped by category.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items?view=overview"
+    },
+    "results": {
+      "type": "string",
+      "title": "All results (JSON)",
+      "description": "Full results including each technology's name, version, confidence, categories, website and icon.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    }
+  }
+}

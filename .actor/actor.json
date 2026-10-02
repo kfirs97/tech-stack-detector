@@ -1,7 +1,7 @@
 {
   "actorSpecification": 1,
   "name": "tech-stack-detector",
-  "title": "Tech Stack Detector — Wappalyzer Alternative",
+  "title": "Tech Stack Detector \u2014 Wappalyzer Alternative",
   "description": "Find out what any website is built with: CMS, frameworks, analytics, CDN, e-commerce platform, hosting and 7,600+ other technologies. Fast, cheap, bulk-ready.",
   "version": "0.1",
   "buildTag": "latest",
@@ -13,19 +13,151 @@
       "views": {
         "overview": {
           "title": "Overview",
-          "transformation": { "fields": ["url", "statusCode", "technologyCount", "byCategory", "error"] },
+          "transformation": {
+            "fields": [
+              "url",
+              "statusCode",
+              "technologyCount",
+              "byCategory",
+              "error"
+            ]
+          },
           "display": {
             "component": "table",
             "properties": {
-              "url": { "label": "Website", "format": "link" },
-              "statusCode": { "label": "Status", "format": "number" },
-              "technologyCount": { "label": "Technologies", "format": "number" },
-              "byCategory": { "label": "By category", "format": "object" },
-              "error": { "label": "Error", "format": "text" }
+              "url": {
+                "label": "Website",
+                "format": "link"
+              },
+              "statusCode": {
+                "label": "Status",
+                "format": "number"
+              },
+              "technologyCount": {
+                "label": "Technologies",
+                "format": "number"
+              },
+              "byCategory": {
+                "label": "By category",
+                "format": "object"
+              },
+              "error": {
+                "label": "Error",
+                "format": "text"
+              }
             }
           }
         }
+      },
+      "fields": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Website as requested (normalized)."
+          },
+          "finalUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "URL after redirects."
+          },
+          "statusCode": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "HTTP status of the final response."
+          },
+          "technologyCount": {
+            "type": "integer",
+            "description": "Number of technologies detected."
+          },
+          "technologies": {
+            "type": "array",
+            "description": "Detected technologies.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "confidence": {
+                  "type": "integer"
+                },
+                "categories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "website": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "icon": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "categories"
+              ]
+            }
+          },
+          "byCategory": {
+            "type": "object",
+            "description": "Technology names grouped by category.",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "responseTimeMs": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Time to fetch the website."
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Why the website couldn't be analyzed (not charged)."
+          }
+        },
+        "required": [
+          "url",
+          "technologyCount",
+          "technologies",
+          "byCategory",
+          "error"
+        ]
       }
     }
-  }
+  },
+  "output": "./output_schema.json"
 }
