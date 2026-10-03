@@ -15,9 +15,10 @@ await Actor.main(async () => {
   log.info(`Analyzing ${urls.length} website(s) with concurrency ${concurrency}`);
 
   let next = 0;
+  let limitReached = false;
   let done = 0;
   const worker = async () => {
-    while (next < urls.length) {
+    while (next < urls.length && !limitReached) {
       const url = urls[next++];
       let record;
       try {
@@ -42,8 +43,12 @@ await Actor.main(async () => {
       await Actor.pushData(record);
       // Charge only for websites that were actually analyzed.
       if (!record.error) {
-        const charged = await Actor.charge({ eventName: 'website-analyzed' });
-        if (done === 0) log.info(`Charging check: ${JSON.stringify({ chargedCount: charged.chargedCount, limitReached: charged.eventChargeLimitReached })}`);
+        const { eventChargeLimitReached } = await Actor.charge({ eventName: 'website-analyzed' });
+        // The user's spending cap is reached: stop instead of analyzing websites they can't be charged for.
+        if (eventChargeLimitReached && !limitReached) {
+          limitReached = true;
+          log.warning('Maximum charge for this run reached — stopping. Raise "Max cost per run" to analyze the remaining websites.');
+        }
       }
       done++;
       if (done % 25 === 0) log.info(`Progress: ${done}/${urls.length}`);
